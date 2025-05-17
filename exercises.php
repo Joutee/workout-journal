@@ -11,9 +11,12 @@ $query = $db->prepare('
     FROM exercise e
     LEFT JOIN exercise_muscle_group emg ON e.exercise_id = emg.exercise_id
     LEFT JOIN muscle_group mg ON emg.muscle_group_id = mg.muscle_group_id
+    WHERE e.user_id = :user_id
     ORDER BY e.name DESC, mg.name
 ');
-$query->execute();
+$query->execute([
+    ':user_id' => $_SESSION['user_id']
+]);
 $rows = $query->fetchAll(PDO::FETCH_ASSOC);
 
 $exercises = [];
