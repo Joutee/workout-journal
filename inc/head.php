@@ -8,11 +8,3 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
     integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
 </head>
-
-<body>
-  <header class="container bg-dark">
-    <h1 class="text-white py-4 px-2">Tréninkový deník</h1>
-    <?php //include 'inc/navbar.php'; ?>
-    <a href="./signout.php" class="btn btn-primary">Odhlásit</a>
-  </header>
-  <main class="container">
