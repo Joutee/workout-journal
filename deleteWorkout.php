@@ -1,5 +1,6 @@
 <?php
 require_once 'inc/user.php';
+include 'inc/layoutApp.php';
 
 if (empty($_REQUEST['id'])) {
     header('Location: index.php');
@@ -13,6 +14,6 @@ $result = $query->execute([
 if (!$result) {
     echo '<div class="alert alert-danger">Trénink se nepodařilo smazat.</div>';
 } else {
-    echo '<div class="alert alert-danger">Trénink úspěšně smazán.</div>';
+    echo '<div class="alert alert-success">Trénink úspěšně smazán.</div>';
 }
 exit;

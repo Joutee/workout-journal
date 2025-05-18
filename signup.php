@@ -33,8 +33,8 @@ if (!empty($_POST)) {
         }
     }
 
-    if (empty($_POST['password']) || (strlen($_POST['password']) < 6)) {
-        $errors[] = 'Heslo musí být dlouhé aslespoň 6 znaků.';
+    if (empty($_POST['password']) || (strlen($_POST['password']) < 8)) {
+        $errors[] = 'Heslo musí být dlouhé aslespoň 8 znaků.';
     } elseif ($_POST['password'] !== $_POST['password2']) {
         $errors[] = 'Hesla se neshodují.';
     }

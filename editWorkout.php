@@ -101,7 +101,7 @@ if (!empty($_POST)) {
 
             // Přidání nových sérií
             foreach ($exerciseSets as $exerciseSet) {
-                if (!empty($exerciseSet['exercise_id']) && !empty($exerciseSet['repetitions']) && !empty($exerciseSet['weight'])) {
+                if (isset($exerciseSet['exercise_id']) && isset($exerciseSet['repetitions']) && isset($exerciseSet['weight'])) {
                     $query = $db->prepare('INSERT INTO exercise_set (workout_id, exercise_id, repetitions, weight) VALUES (:workout_id, :exercise_id, :repetitions, :weight)');
                     $query->execute([
                         ':workout_id' => $workout_id,
@@ -180,11 +180,11 @@ if (!empty($errors)) {
     </div>
     <button type="button" onclick="addExerciseSet()">Přidat sérii</button>
     <br /><br />
-    <input type="submit" value="Uložit"><a href="index.php">Zrušit</a>
+    <input type="submit" value="Upravit"><a href="index.php">Zrušit</a>
 
 
     <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"
-        onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat trénink</a>
+        onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat</a>
 
 </form>
 <script>

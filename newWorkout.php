@@ -1,7 +1,7 @@
 <?php
 require_once 'inc/user.php';
 $pageTitle = 'Nový trénink';
-$pageTitle = 'Nový trénink';
+
 
 include 'inc/layoutApp.php';
 
@@ -57,7 +57,7 @@ if (!empty($_POST)) {
         if ($result) {
             $workout_id = $db->lastInsertId();
             foreach ($exerciseSets as $exerciseSet) {
-                if (!empty($exerciseSet['exercise_id']) && !empty($exerciseSet['repetitions']) && !empty($exerciseSet['weight'])) {
+                if (isset($exerciseSet['exercise_id']) && isset($exerciseSet['repetitions']) && isset($exerciseSet['weight'])) {
                     $query = $db->prepare('INSERT INTO exercise_set (workout_id, exercise_id, repetitions, weight) VALUES (:workout_id, :exercise_id, :repetitions, :weight)');
                     $query->execute([
                         ':workout_id' => $workout_id,
@@ -69,7 +69,6 @@ if (!empty($_POST)) {
                     $errors['exercise_sets'] = 'Všechny cvičební série musí mít vyplněné všechny údaje.';
                 }
             }
-            echo '<div class="alert alert-success">Trénink byl úspěšně přidán.</div>';
             header('Location: workouts.php');
             exit;
         } else {
@@ -108,7 +107,8 @@ if (!empty($errors)) {
     </div>
     <button type="button" onclick="addExerciseSet()">Přidat sérii</button>
     <br /><br />
-    <input type="submit" value="Uložit"><a href="index.php">Zrušit</a>
+    <input type="submit" value="Přidat"><a href="index.php">Zrušit</a>
+
 </form>
 <script>
     const exercises = <?php echo json_encode(

@@ -1,5 +1,5 @@
 <?php
-require_once 'inc/db.php';
+require_once 'db.php';
 session_start();
 
 function logout_and_redirect()
