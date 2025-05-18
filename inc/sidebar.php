@@ -1,8 +1,19 @@
-<nav class="d-flex flex-column bg-light vh-100 p-3" style="width: 15rem; position:fixed; left:0; top:0;">
-    <a href="index.php" class="mb-3 h4 text-decoration-none">🏋️‍♂️ Deník</a>
-    <a href="index.php" class="nav-link">Přehled</a>
-    <a href="workouts.php" class="nav-link">Tréninky</a>
-    <a href="exercises.php" class="nav-link">Moje cviky</a>
-    <a href="profile.php" class="nav-link">Profil</a>
-    <a href="signout.php" class="nav-link text-danger mt-auto">Odhlásit</a>
+<?php
+require_once __DIR__ . '/user.php';
+?>
+<nav class="d-flex flex-column bg-dark-custom vh-100 p-3 shadow"
+    style="width: 15vw; position:fixed; left:0; top:0; min-height:100vh;">
+    <a href="index.php" class="mb-4 h4 text-decoration-none text-warning fw-bold text-center">🏋️‍♂️ Deník</a>
+    <a href="index.php" class="nav-link py-2">Přehled</a>
+    <a href="workouts.php" class="nav-link py-2">Tréninky</a>
+    <a href="exercises.php" class="nav-link py-2">Moje cviky</a>
+    <a href="profile.php" class="nav-link py-2">Profil</a>
+    <div class="mt-auto">
+        <?php if (!empty($_SESSION['user_full_name'])): ?>
+            <div class="mb-3 text-light small text-center" style="font-size:1.1em;">
+                <?= htmlspecialchars(implode(' ', $_SESSION['user_full_name'])) ?>
+            </div>
+        <?php endif; ?>
+        <a href="signout.php" class="nav-link text-danger text-center fw-bold">Odhlásit</a>
+    </div>
 </nav>

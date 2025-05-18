@@ -1,0 +1,1 @@
+<p>write as an email to kovp07@vse.cz</p>

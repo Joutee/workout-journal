@@ -1,11 +1,6 @@
 <?php
-require_once 'inc/db.php';
-session_start();
+require_once __DIR__ . '/inc/anonymUser.php';
 
-if (!empty($_SESSION['user_id'])) {
-    header('Location: index.php');
-    exit;
-}
 
 $errors = [];
 
@@ -47,8 +42,24 @@ if (!empty($errors)) {
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
     <button type="submit" class="btn btn-primary">Přihlásit se</button>
-    <a href="./signup.php">Vytvořit účet!</a>
-    </mai>
     <?php
-    include 'inc/footer.php';
+    #region Facebook login
+    
+    $appId = '737208485413000';
+    $redirectUri = urlencode('https://eso.vse.cz/~kovp07/semestralka/fbCallback.php');
+    $state = bin2hex(random_bytes(8)); // pro CSRF ochranu, ulož do $_SESSION['fb_state']
+    $_SESSION['fb_state'] = $state;
+
+    $fbLoginUrl = "https://www.facebook.com/v19.0/dialog/oauth?client_id=$appId&redirect_uri=$redirectUri&state=$state&scope=email";
+    echo '<a href="' . $fbLoginUrl . '" class="btn btn-primary">Přihlásit se přes Facebook</a>';
+
+
+    #endregion Facebook login
     ?>
+
+    <a href="./signup.php">Vytvořit účet!</a>
+</form>
+
+<?php
+include 'inc/footer.php';
+?>

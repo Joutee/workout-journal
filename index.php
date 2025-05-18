@@ -1,8 +1,9 @@
 <?php
-require_once 'inc/user.php';
+require_once __DIR__ . '/inc/user.php';
 
 $pageTitle = 'Přehled';
-include './inc/layoutApp.php';
+include __DIR__ . '/inc/layoutApp.php';
+
 
 #region Total weight
 $query = $db->prepare('
@@ -128,120 +129,93 @@ foreach ($workoutWeights as $row) {
 #endregion Each workout total weight line chart
 ?>
 
-<style>
-    .dashboard-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 32px;
-        margin-bottom: 32px;
-    }
-
-    @media (max-width: 900px) {
-        .dashboard-grid {
-            grid-template-columns: 1fr;
-        }
-    }
-
-    .card {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-        padding: 24px;
-        margin-bottom: 24px;
-    }
-
-    .card h2 {
-        margin-top: 0;
-    }
-</style>
-
-<div class="dashboard-grid">
-
-
-    <div>
-        <div class="card" style="text-align:center;">
-            <h2>Celková zvednutá váha</h2>
-            <div style="font-size:2em; font-weight:bold; margin: 16px 0;">
-                <?php echo number_format($totalWeight ?? 0, 1, ',', ' '); ?> kg
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Levý sloupec: Statistiky a grafy -->
+        <div class="col-lg-5 col-12">
+            <div class="card text-center mb-4 shadow">
+                <h2 class="mb-3">Celková zvednutá váha</h2>
+                <div class="display-4 fw-bold text-warning">
+                    <?php echo number_format($totalWeight ?? 0, 1, ',', ' '); ?> kg
+                </div>
+            </div>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Rozložení svalových skupin (%)</h3>
+                <div class="mx-auto" style="max-width: 350px;">
+                    <canvas id="muscleChart"></canvas>
+                </div>
+            </div>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Poměr sérií bez zátěže / se zátěží</h3>
+                <div class="mx-auto" style="max-width: 350px;">
+                    <canvas id="weightChart"></canvas>
+                </div>
             </div>
         </div>
-
-        <div class="card">
-            <h2>Rozložení cvičených svalových skupin (%)</h2>
-            <div style="max-width: 350px; margin: 0 auto;">
-                <canvas id="muscleChart"></canvas>
+        <!-- Pravý sloupec: Vývoj a tabulky -->
+        <div class="col-lg-7 col-12">
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Vývoj celkové váhy podle tréninku</h3>
+                <div style="height: 300px;">
+                    <canvas id="workoutWeightChart"></canvas>
+                </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h2>Pomer sérií bez zátěže a se zátěží (%)</h2>
-            <div style="max-width: 350px; margin: 0 auto;">
-                <canvas id="weightChart"></canvas>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Maximální váha v sérii podle cviku</h3>
+                <div style="height: 300px;">
+                    <canvas id="maxWeightChart"></canvas>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div>
-        <div class="card">
-            <h2>Vývoj celkové váhy podle tréninku</h2>
-            <div style="max-width: 100%; height: 300px;">
-                <canvas id="workoutWeightChart"></canvas>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Maximální váha v sérii podle cviku</h2>
-            <div style="max-width: 100%; height: 300px;">
-                <canvas id="maxWeightChart"></canvas>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Poslední zaznamenaná série pro každý cvik</h2>
-            <div style="overflow-x:auto;">
-                <table class="table" style="min-width:350px;">
-                    <thead>
-                        <tr>
-                            <th>Cvik</th>
-                            <th>Opakování</th>
-                            <th>Váha (kg)</th>
-                            <th>Datum</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($lastSets as $set): ?>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Poslední zaznamenaná série pro každý cvik</h3>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-bordered align-middle mb-0">
+                        <thead>
                             <tr>
-                                <td><?= htmlspecialchars($set['name']) ?></td>
-                                <td><?= htmlspecialchars($set['repetitions']) ?></td>
-                                <td><?= htmlspecialchars($set['weight']) ?></td>
-                                <td><?= htmlspecialchars($set['date']) ?></td>
+                                <th>Cvik</th>
+                                <th>Opakování</th>
+                                <th>Váha (kg)</th>
+                                <th>Datum</th>
                             </tr>
-                        <?php endforeach; ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($lastSets as $set): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($set['name']) ?></td>
+                                    <td><?= htmlspecialchars($set['repetitions']) ?></td>
+                                    <td><?= htmlspecialchars($set['weight']) ?></td>
+                                    <td><?= htmlspecialchars($set['date']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="card" style="cursor:pointer;" onclick="window.location.href='workouts.php'">
-    <h2>Poslední tréninky</h2>
-    <?php if (!empty($workouts)): ?>
-        <div style="display:flex; flex-wrap:wrap; gap:24px;">
-            <?php foreach ($workouts as $workout): ?>
-                <a href="editWorkout.php?id=<?= urlencode($workout['workout_id']) ?>"
-                    style="text-decoration:none; color:inherit; flex:1 1 250px;">
-                    <div style="border:1px solid #eee; border-radius:8px; padding:16px; min-width:200px;">
-                        <h3><?= htmlspecialchars($workout['name']) ?></h3>
-                        <p><?= htmlspecialchars($workout['date']) ?></p>
-                        <p><?= htmlspecialchars($workout['note']) ?></p>
+    <!-- Poslední tréninky -->
+    <div class="card mt-4 shadow">
+        <h3 class="mb-3">Poslední tréninky</h3>
+        <?php if (!empty($workouts)): ?>
+            <div class="row g-3">
+                <?php foreach ($workouts as $workout): ?>
+                    <div class="col-md-4 col-12">
+                        <a href="editWorkout.php?id=<?= urlencode($workout['workout_id']) ?>"
+                            class="text-decoration-none text-reset">
+                            <div class="card bg-dark-custom h-100 p-3">
+                                <h4 class="text-warning"><?= htmlspecialchars($workout['name']) ?></h4>
+                                <div class="small text-secondary"><?= htmlspecialchars($workout['date']) ?></div>
+                                <div><?= htmlspecialchars($workout['note']) ?></div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            <?php endforeach; ?>
-        </div>
-    <?php else: ?>
-        <p>Žádné tréninky zatím nejsou zaznamenány.</p>
-    <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <p class="text-center text-muted">Žádné tréninky zatím nejsou zaznamenány.</p>
+        <?php endif; ?>
+    </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -269,6 +243,7 @@ foreach ($workoutWeights as $row) {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
+                legend: { labels: { color: '#f1f1f1' } },
                 tooltip: {
                     callbacks: {
                         label: function (context) {
@@ -298,6 +273,7 @@ foreach ($workoutWeights as $row) {
             responsive: true,
             maintainAspectRatio: true,
             plugins: {
+                legend: { labels: { color: '#f1f1f1' } },
                 tooltip: {
                     callbacks: {
                         label: function (context) {
@@ -326,8 +302,15 @@ foreach ($workoutWeights as $row) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    title: { display: true, text: 'kg' }
+                    title: { display: true, text: 'kg', color: '#f1f1f1' },
+                    ticks: { color: '#f1f1f1' }
+                },
+                x: {
+                    ticks: { color: '#f1f1f1' }
                 }
+            },
+            plugins: {
+                legend: { labels: { color: '#f1f1f1' } }
             }
         }
     });
@@ -353,11 +336,16 @@ foreach ($workoutWeights as $row) {
             scales: {
                 y: {
                     beginAtZero: true,
-                    title: { display: true, text: 'kg' }
+                    title: { display: true, text: 'kg', color: '#f1f1f1' },
+                    ticks: { color: '#f1f1f1' }
                 },
                 x: {
-                    title: { display: true, text: 'Datum' }
+                    title: { display: true, text: 'Datum', color: '#f1f1f1' },
+                    ticks: { color: '#f1f1f1' }
                 }
+            },
+            plugins: {
+                legend: { labels: { color: '#f1f1f1' } }
             }
         }
     });

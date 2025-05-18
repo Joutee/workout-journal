@@ -1,7 +1,7 @@
 <?php
-require_once 'inc/user.php';
+require_once __DIR__.'/inc/user.php';
 $pageTitle = 'Tréninky';
-include 'inc/layoutApp.php';
+include __DIR__.'/inc/layoutApp.php';
 
 echo '<a href="newWorkout.php" class="btn btn-success mb-3">Přidat nový trénink</a>';
 
@@ -92,6 +92,8 @@ foreach ($workouts as $workout) {
         }
         echo '</ul>';
     }
+    echo '<a href="duplicateWorkout.php?id=' . urlencode($workout['workout_id']) . '" class="btn btn-warning btn-sm" style="margin-top:8px; display:inline-block;">Duplikovat trénink</a>';
+
     echo '</div>';
     echo '</a>';
 }

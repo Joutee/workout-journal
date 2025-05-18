@@ -1,7 +1,7 @@
 <?php
-require_once 'inc/user.php';
+require_once __DIR__ . '/inc/user.php';
 $pageTitle = 'Upravit cvik';
-include 'inc/layoutApp.php';
+include __DIR__ . '/inc/layoutApp.php';
 
 #region muscle_group query
 $muscleGroups = [];
@@ -18,7 +18,7 @@ $name = '';
 $description = '';
 $muscle_group_ids = [];
 
-if (!empty($_REQUEST['id'])) {
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $exercise_id = $_REQUEST['id'];
     $query = $db->prepare('SELECT * FROM exercise WHERE exercise_id=:exercise_id AND user_id=:user_id;');
     $query->execute([
@@ -67,74 +67,84 @@ if (!empty($_POST)) {
 
     #region database insertion
     if (empty($errors)) {
-           $query = $db->prepare('UPDATE exercise SET name = :name, description = :description WHERE exercise_id = :exercise_id AND user_id = :user_id');
-    $result = $query->execute([
-        ':name' => $name,
-        ':description' => $description,
-        ':exercise_id' => $exercise_id, 
-        ':user_id' => $_SESSION['user_id']
-    ]);
-    if ($result) {
-        $query = $db->prepare('DELETE FROM exercise_muscle_group WHERE exercise_id = :exercise_id');
-        $query->execute([':exercise_id' => $exercise_id]);
+        $query = $db->prepare('UPDATE exercise SET name = :name, description = :description WHERE exercise_id = :exercise_id AND user_id = :user_id');
+        $result = $query->execute([
+            ':name' => $name,
+            ':description' => $description,
+            ':exercise_id' => $exercise_id,
+            ':user_id' => $_SESSION['user_id']
+        ]);
+        if ($result) {
+            $query = $db->prepare('DELETE FROM exercise_muscle_group WHERE exercise_id = :exercise_id');
+            $query->execute([':exercise_id' => $exercise_id]);
 
-        $query = $db->prepare('INSERT INTO exercise_muscle_group (exercise_id, muscle_group_id) VALUES (:exercise_id, :muscle_group_id)');
-        foreach ($muscle_group_ids as $muscle_group_id) {
-            $query->execute([
-                ':exercise_id' => $exercise_id,
-                ':muscle_group_id' => $muscle_group_id
-            ]);
+            $query = $db->prepare('INSERT INTO exercise_muscle_group (exercise_id, muscle_group_id) VALUES (:exercise_id, :muscle_group_id)');
+            foreach ($muscle_group_ids as $muscle_group_id) {
+                $query->execute([
+                    ':exercise_id' => $exercise_id,
+                    ':muscle_group_id' => $muscle_group_id
+                ]);
+            }
+            echo '<div class="alert alert-success mt-3">Cvik byl úspěšně upraven.</div>';
+            header('Location: exercises.php');
+            exit;
+        } else {
+            $errors[] = 'Došlo k chybě při úpravě cviku.';
         }
-        echo '<div class="alert alert-success">Cvik byl úspěšně upraven.</div>';
-        header('Location: exercises.php');
-        exit;
-    } else {
-        $errors[] = 'Došlo k chybě při úpravě cviku.';
-    }
     }
     #endregion database insertion
 }
-if (!empty($errors)) {
-    foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
-    }
-}
 ?>
 
-<form method="post" action="">
-    <div class="form-group">
-        <label for="name">Název cviku</label>
-        <input type="text" class="form-control" id="name" name="name" required
-            value="<?php echo htmlspecialchars($name); ?>">
-    </div>
-    <div class="form-group">
-        <label for="description">Popis (volitelné)</label>
-        <textarea class="form-control" id="description"
-            name="description"><?php echo htmlspecialchars($description); ?></textarea>
-    </div>
-    <div class="form-group">
-        <label>Svalové skupiny</label><br>
-        <?php foreach ($muscleGroups as $group): ?>
-            <div class="form-check form-check-inline">
-                <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="mg_<?php echo $group['muscle_group_id']; ?>"
-                    name="muscle_group_ids[]"
-                    value="<?php echo $group['muscle_group_id']; ?>"
-                    <?php if (!empty($selectedMuscles) && in_array($group['muscle_group_id'], $selectedMuscles)) echo 'checked'; ?>
-                >
-                <label class="form-check-label" for="mg_<?php echo $group['muscle_group_id']; ?>">
-                    <?php echo htmlspecialchars($group['name']); ?>
-                </label>
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-10 col-12">
+            <div class="card shadow p-4">
+                <h2 class="mb-4 text-primary-custom">Upravit cvik</h2>
+                <?php
+                if (!empty($errors)) {
+                    foreach ($errors as $error) {
+                        echo '<div class="alert alert-danger">' . htmlspecialchars($error) . '</div>';
+                    }
+                }
+                ?>
+                <form method="post" action="">
+                    <div class="form-group mb-3">
+                        <label for="name">Název cviku</label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                            value="<?php echo htmlspecialchars($name); ?>">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="description">Popis (volitelné)</label>
+                        <textarea class="form-control" id="description"
+                            name="description"><?php echo htmlspecialchars($description); ?></textarea>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Svalové skupiny</label><br>
+                        <?php foreach ($muscleGroups as $group): ?>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox"
+                                    id="mg_<?php echo $group['muscle_group_id']; ?>" name="muscle_group_ids[]"
+                                    value="<?php echo $group['muscle_group_id']; ?>" <?php if (!empty($selectedMuscles) && in_array($group['muscle_group_id'], $selectedMuscles))
+                                           echo 'checked'; ?>>
+                                <label class="form-check-label" for="mg_<?php echo $group['muscle_group_id']; ?>">
+                                    <?php echo htmlspecialchars($group['name']); ?>
+                                </label>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Upravit</button>
+                        <a href="exercises.php" class="btn btn-secondary">Zrušit</a>
+                        <a href="deleteExercise.php?id=<?php echo urlencode($exercise_id); ?>"
+                            class="btn btn-danger ms-auto"
+                            onclick="return confirm('Opravdu chcete tento cvik smazat?');">Smazat</a>
+                    </div>
+                </form>
             </div>
-        <?php endforeach; ?>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Upravit</button>
-    <a href="exercises.php" class="btn btn-secondary">Zrušit</a>
-        <a href="deleteExercise.php?id=<?php echo urlencode($exercise_id); ?>" class="btn btn-danger"
-        onclick="return confirm('Opravdu chcete tento cvik smazat?');">Smazat</a>
-</form>
+</div>
 
 <?php
 include 'inc/footer.php';

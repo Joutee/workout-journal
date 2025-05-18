@@ -1,10 +1,7 @@
 <?php
-require_once 'inc/user.php';
-
-
+require_once __DIR__.'/inc/user.php';
 $pageTitle = 'Úprava tréninku';
-
-include 'inc/layoutApp.php';
+include __DIR__.'/inc/layoutApp.php';
 
 $exercises = [];
 $query = $db->prepare('SELECT exercise_id, name FROM exercise WHERE user_id=:user_id or user_id = 0 ORDER BY name;');
@@ -33,7 +30,7 @@ $note = '';
 $exerciseSets = [];
 
 
-if (!empty($_REQUEST['id'])) {
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $workout_id = $_REQUEST['id'];
     $query = $db->prepare('SELECT * FROM workout WHERE workout_id=:workout_id AND user_id=:user_id;');
     $query->execute([

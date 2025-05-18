@@ -1,6 +1,6 @@
 <?php
-require_once 'inc/user.php';
-include 'inc/layoutApp.php';
+require_once __DIR__.'/inc/user.php';
+include __DIR__.'/inc/layoutApp.php';
 
 if (empty($_REQUEST['id'])) {
     header('Location: index.php');

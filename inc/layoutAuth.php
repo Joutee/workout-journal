@@ -1,5 +1,5 @@
 <?php
-include 'head.php';
+include __DIR__.'/head.php';
 echo '<body>';
 ?>
 <main class="container">

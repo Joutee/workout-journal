@@ -1,7 +1,7 @@
 <?php
-require_once 'inc/user.php';
+require_once __DIR__.'/inc/user.php';
 $pageTitle = 'Změna hesla';
-include 'inc/layoutApp.php';
+include __DIR__.'/inc/layoutApp.php';
 
 $errors = [];
 

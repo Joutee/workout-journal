@@ -1,7 +1,7 @@
 <?php
-require_once 'inc/user.php';
+require_once __DIR__.'/inc/user.php';
 $pageTitle = 'Nový cvik';
-include 'inc/layoutApp.php';
+include __DIR__.'/inc/layoutApp.php';
 
 #region muscle_group query
 $muscleGroups = [];
@@ -75,12 +75,12 @@ if (!empty($errors)) {
     <div class="form-group">
         <label for="name">Název cviku</label>
         <input type="text" class="form-control" id="name" name="name" required
-            value="<?php echo htmlspecialchars(@$_POST['name']); ?>">
+            value="<?php echo htmlspecialchars(@$_POST['name'] ?? ''); ?>">
     </div>
     <div class="form-group">
         <label for="description">Popis (volitelné)</label>
         <textarea class="form-control" id="description"
-            name="description"><?php echo htmlspecialchars(@$_POST['description']); ?></textarea>
+            name="description"><?php echo htmlspecialchars(@$_POST['description'] ?? ''); ?></textarea>
     </div>
     <div class="form-group">
         <label>Svalové skupiny</label><br>
