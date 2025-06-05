@@ -16,6 +16,7 @@ if (!empty($_POST['password']) && !empty($_POST['email'])) {
     if (!empty($user) && password_verify($password, $user['password'])) {
         $_SESSION['user_id'] = $user['user_id'];
         $_SESSION['user_full_name'] = [$user['name'], $user['surname']];
+        $_SESSION['admin'] = $user['admin']; // přidáno pro admin kontrolu
         header('Location: index.php');
         exit;
     } else {

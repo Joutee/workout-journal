@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/inc/user.php';
+require_once __DIR__ . '/inc/user.php';
 $pageTitle = 'Úprava tréninku';
-include __DIR__.'/inc/layoutApp.php';
+include __DIR__ . '/inc/layoutApp.php';
 
 $exercises = [];
 $query = $db->prepare('SELECT exercise_id, name FROM exercise WHERE user_id=:user_id or user_id = 0 ORDER BY name;');
@@ -177,7 +177,7 @@ if (!empty($errors)) {
     </div>
     <button type="button" onclick="addExerciseSet()">Přidat sérii</button>
     <br /><br />
-    <input type="submit" value="Upravit"><a href="index.php">Zrušit</a>
+    <input type="submit" value="Upravit"><a href="workouts.php">Zrušit</a>
 
 
     <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"

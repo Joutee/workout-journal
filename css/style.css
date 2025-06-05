@@ -116,3 +116,9 @@ nav .nav-link.active {
   margin-bottom: 8px;
   white-space: normal;
 }
+
+.list-group-item {
+  background-color: #23272b !important;
+  color: #f1f1f1 !important;
+  border-color: #343a40 !important;
+}
