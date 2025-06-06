@@ -23,4 +23,6 @@ try {
         exit;
     }
 }
-exit;
+
+
+exit; //testik
