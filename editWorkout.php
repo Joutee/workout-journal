@@ -129,59 +129,79 @@ if (!empty($errors)) {
 }
 ?>
 
-<form method="post" id="workoutForm">
-    <label for="name">Název tréninku</label><br />
-    <input type="text" name="name" id="name"
-        value="<?php echo htmlspecialchars($name ?? $days[date('N')] . ' trénink'); ?>" required><br /><br />
+<form method="post" style="max-width: 700px;">
+    <div class="mb-3">
+        <label for="name" class="form-label">Název tréninku</label>
+        <input type="text" name="name" id="name" class="form-control"
+            value="<?php echo htmlspecialchars($_POST['name'] ?? $days[date('N')] . ' trénink'); ?>" required>
+    </div>
 
-    <label for="date">Datum</label><br />
-    <input type="date" name="date" id="date" value="<?php echo htmlspecialchars($date ?? date('Y-m-d')); ?>"
-        required><br /><br />
+    <div class="mb-3">
+        <label for="date" class="form-label">Datum</label>
+        <input type="date" name="date" id="date" class="form-control"
+            value="<?php echo htmlspecialchars($_POST['date'] ?? date('Y-m-d')); ?>" max="<?php echo date('Y-m-d'); ?>"
+            required>
+    </div>
 
-    <label for="time">Čas</label><br />
-    <input type="time" name="time" id="time" value="<?php echo htmlspecialchars($time ?? date('H:i')); ?>"
-        required><br /><br />
+    <div class="mb-3">
+        <label for="time" class="form-label">Čas</label>
+        <input type="time" name="time" id="time" class="form-control"
+            value="<?php echo htmlspecialchars($_POST['time'] ?? date('H:i')); ?>" required>
+    </div>
 
-    <label for="note">Poznámka</label><br />
-    <textarea name="note" id="note"><?php echo htmlspecialchars($note); ?></textarea><br /><br />
+    <div class="mb-3">
+        <label for="note" class="form-label">Poznámka</label>
+        <textarea name="note" class="form-control" id="note"><?php echo htmlspecialchars($note); ?></textarea>
+    </div>
+
 
     <h4>Cvičební série</h4>
     <div id="exerciseSets">
         <?php
         if (!empty($exerciseSets)) {
             foreach ($exerciseSets as $i => $set) { ?>
-                <div class="exercise-set border rounded p-2 mb-2">
-                    <label>Cvik:
-                        <select name="exercise_sets[<?php echo $i; ?>][exercise_id]" required>
-                            <?php foreach ($exercises as $exercise): ?>
-                                <option value="<?php echo $exercise['exercise_id']; ?>" <?php if ($set['exercise_id'] == $exercise['exercise_id'])
-                                       echo 'selected'; ?>>
-                                    <?php echo htmlspecialchars($exercise['name']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </label>
-                    <label>Počet opakování:
-                        <input type="number" name="exercise_sets[<?php echo $i; ?>][repetitions]" min="1" required
-                            value="<?php echo htmlspecialchars($set['repetitions']); ?>">
-                    </label>
-                    <label>Váha (kg):
-                        <input type="number" name="exercise_sets[<?php echo $i; ?>][weight]" min="0" step="0.1" required
-                            value="<?php echo htmlspecialchars($set['weight']); ?>">
-                    </label>
-                    <button type="button" onclick="this.parentElement.remove()">Odebrat</button>
+                <div class="exercise-set card d-flex flex-row justify-content-between mb-2">
+                    <div class="d-flex flex-row">
+                        <div class="mr-1 d-flex flex-column">
+                            <label>Cvik:</label>
+                            <select name="exercise_sets[<?php echo $i; ?>][exercise_id]" required>
+                                <?php foreach ($exercises as $exercise): ?>
+                                    <option value="<?php echo $exercise['exercise_id']; ?>" <?php if ($set['exercise_id'] == $exercise['exercise_id'])
+                                           echo 'selected'; ?>>
+                                        <?php echo htmlspecialchars($exercise['name']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="mr-1 d-flex flex-column">
+                            <label>Počet opakování:</label>
+                            <input type="number" name="exercise_sets[<?php echo $i; ?>][repetitions]" min="1" required
+                                value="<?php echo htmlspecialchars($set['repetitions']); ?>">
+                        </div>
+                        <div class="mr-1 d-flex flex-column">
+                            <label>Váha (kg):</label>
+                            <input type="number" name="exercise_sets[<?php echo $i; ?>][weight]" min="0" step="0.1" required
+                                value="<?php echo htmlspecialchars($set['weight']); ?>">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column justify-content-end">
+                        <button type="button" onclick="removeExerciseSet(this)"
+                            class="btn btn-danger btn-sm h-50">&times;</button>
+                    </div>
                 </div>
             <?php }
         }
         ?>
     </div>
-    <button type="button" onclick="addExerciseSet()">Přidat sérii</button>
-    <br /><br />
-    <input type="submit" value="Upravit"><a href="workouts.php">Zrušit</a>
+    <button type="button" onclick="addExerciseSet()" class="btn btn-outline-primary btn-sm mt-2 mb-3"><i
+            class="bi bi-plus"></i> Přidat sérii</button>
 
-
-    <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"
-        onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat</a>
+    <div class="d-flex mt-4">
+        <input type="submit" value="Upravit" class="btn btn-primary mr-2">
+        <a href="workouts.php" class="btn btn-secondary mr-2">Zrušit</a>
+        <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"
+            onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat</a>
+    </div>
 
 </form>
 <script>
@@ -192,20 +212,29 @@ if (!empty($errors)) {
     ); ?>;
 
     function createExerciseSet(index) {
-        const div = document.createElement(' div'); div.className = 'exercise-set border rounded p-2 mb-2';
-        div.innerHTML = ` <label>Cvik:
-        <select name="exercise_sets[${index}][exercise_id]" required>
-            ${exercises.map(e => `<option value="${e.value}">${e.label}</option>`).join('')}
-        </select>
-        </label>
-        <label>Počet opakování:
-            <input type="number" name="exercise_sets[${index}][repetitions]" min="1" required>
-        </label>
-        <label>Váha (kg):
-            <input type="number" name="exercise_sets[${index}][weight]" min="0" step="0.1" required>
-        </label>
-        <button type="button" onclick="removeExerciseSet(this)">Odebrat</button>
-        `;
+        const div = document.createElement('div');
+        div.className = 'exercise-set card d-flex flex-row justify-content-between mb-2';
+        div.innerHTML = `
+    <div class="d-flex flex-row">
+        <div class="mr-1 d-flex flex-column">
+    <label>Cvik:</label>
+      <select name="exercise_sets[${index}][exercise_id]" required>
+        ${exercises.map(e => `<option value="${e.value}">${e.label}</option>`).join('')}
+      </select>
+    </div>
+    <div class="mr-1 d-flex flex-column">
+    <label>Počet opakování:</label>
+      <input type="number" class="w-100" name="exercise_sets[${index}][repetitions]" min="1" required>
+    </div>
+    <div class="mr-1 d-flex flex-column">
+    <label>Váha (kg):</label>
+      <input type="number" name="exercise_sets[${index}][weight]" min="0" step="0.1" required>
+    </div>
+    </div>
+    <div class="d-flex flex-column justify-content-end">
+    <button type="button" onclick="removeExerciseSet(this)" class="btn btn-danger btn-sm h-50">&times;</button>
+    </div>
+  `;
         return div;
     }
 
@@ -217,7 +246,7 @@ if (!empty($errors)) {
     }
 
     function removeExerciseSet(btn) {
-        btn.parentElement.remove();
+        btn.closest('.exercise-set').remove();
     }
 </script>
 

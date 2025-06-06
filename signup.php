@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/inc/anonymUser.php';
+require_once __DIR__ . '/inc/anonymUser.php';
 
 $errors = [];
 
@@ -45,11 +45,11 @@ if (!empty($_POST)) {
             ':password' => $password
         ]);
 
-        //uživatele rovnou přihlásíme
+
         $_SESSION['user_id'] = $db->lastInsertId();
         $_SESSION['user_full_name'] = [$name, $surname];
 
-        //přesměrování na homepage
+        require_once __DIR__ . '/createDefaultExcercise.php';
         header('Location: index.php');
         exit();
     }
@@ -70,31 +70,32 @@ if (!empty($errors)) {
     }
 }
 ?>
-<form method="post">
-    <div class="form-group">
+<form method="post" class="w-25 card d-flex flex-column align-items-center">
+    <h1 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+    <div class="form-group w-100">
         <label for="name">Jméno</label>
         <input type="text" class="form-control" id="name" name="name" required
             value="<?php echo htmlspecialchars(@$_POST['name'] ?? ''); ?>">
     </div>
-    <div class="form-group">
+    <div class="form-group w-100">
         <label for="surname">Příjmení</label>
         <input type="text" class="form-control" id="surname" name="surname" required
             value="<?php echo htmlspecialchars(@$_POST['surname'] ?? ''); ?>">
     </div>
-    <div class="form-group">
+    <div class="form-group w-100">
         <label for="username">Email</label>
         <input type="email" class="form-control" id="email" name="email" required
             value="<?php echo htmlspecialchars(@$_POST['email'] ?? ''); ?>">
     </div>
-    <div class="form-group">
+    <div class="form-group w-100">
         <label for="password">Heslo</label>
         <input type="password" class="form-control" id="password" name="password" required value="">
     </div>
-    <div class="form-group">
+    <div class="form-group w-100">
         <label for="password2">Heslo znovu</label>
         <input type="password" class="form-control" id="password2" name="password2" required value="">
     </div>
-    <button type="submit" class="btn btn-primary">Registrovat se</button>
+    <button type="submit" class="btn btn-primary w-100 mb-3 mt-4">Registrovat se</button>
     <a href="./signin.php">Přihlásit se</a>
     </body>
 

@@ -1,6 +1,5 @@
 <?php
-include __DIR__.'/head.php';
+include __DIR__ . '/head.php';
 echo '<body>';
 ?>
-<main class="container">
-    <h1 class=" py-4 px-2"><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+<main class="d-flex flex-column justify-content-center align-items-center" style="height: 100vh;">

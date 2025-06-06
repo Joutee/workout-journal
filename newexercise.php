@@ -74,12 +74,12 @@ if (!empty($errors)) {
 <form method="post" action="">
     <div class="form-group">
         <label for="name">Název cviku</label>
-        <input type="text" class="form-control" id="name" name="name" required
+        <input type="text" class="form-control w-50" id="name" name="name" required
             value="<?php echo htmlspecialchars(@$_POST['name'] ?? ''); ?>">
     </div>
     <div class="form-group">
         <label for="description">Popis (volitelné)</label>
-        <textarea class="form-control" id="description"
+        <textarea class="form-control w-50" id="description"
             name="description"><?php echo htmlspecialchars(@$_POST['description'] ?? ''); ?></textarea>
     </div>
     <div class="form-group">
@@ -100,7 +100,7 @@ if (!empty($errors)) {
             </div>
         <?php endforeach; ?>
     </div>
-    <button type="submit" class="btn btn-primary">Přidat</button>
+    <button type="submit" class="btn btn-primary mr-2">Přidat</button>
     <a href="exercises.php" class="btn btn-secondary">Zrušit</a>
 </form>
 

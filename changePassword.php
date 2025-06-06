@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__.'/inc/user.php';
+require_once __DIR__ . '/inc/user.php';
 $pageTitle = 'Změna hesla';
-include __DIR__.'/inc/layoutApp.php';
+include __DIR__ . '/inc/layoutApp.php';
 
 $errors = [];
 
@@ -45,17 +45,17 @@ if (!empty($_POST)) {
 <form method="post">
     <div class="form-group">
         <label for="current_password">Současné heslo</label>
-        <input type="password" class="form-control" id="current_password" name="current_password" required>
+        <input type="password" class="form-control w-25" id="current_password" name="current_password" required>
     </div>
     <div class="form-group">
         <label for="new_password">Nové heslo</label>
-        <input type="password" class="form-control" id="new_password" name="new_password" required>
+        <input type="password" class="form-control w-25" id="new_password" name="new_password" required>
     </div>
     <div class="form-group">
         <label for="new_password_confirm">Potvrzení nového hesla</label>
-        <input type="password" class="form-control" id="new_password_confirm" name="new_password_confirm" required>
+        <input type="password" class="form-control w-25" id="new_password_confirm" name="new_password_confirm" required>
     </div>
-    <button type="submit" class="btn btn-primary">Změnit heslo</button>
+    <button type="submit" class="btn btn-primary mr-2">Změnit heslo</button>
     <a href="profile.php" class="btn btn-secondary">Zrušit</a>
 </form>
 

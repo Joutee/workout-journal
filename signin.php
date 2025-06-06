@@ -32,17 +32,18 @@ if (!empty($errors)) {
     }
 }
 ?>
-<form method="post">
-    <div class="form-group">
+<form method="post" class="w-25 card d-flex flex-column align-items-center">
+    <h1 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+    <div class="form-group w-100">
         <label for="email">Email</label>
         <input type="email" class="form-control" id="email" name="email" required
             value="<?php echo htmlspecialchars(@$_POST['email'] ?? ''); ?>">
     </div>
-    <div class="form-group">
+    <div class="form-group w-100">
         <label for="password">Heslo</label>
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
-    <button type="submit" class="btn btn-primary">Přihlásit se</button>
+    <button type="submit" class="btn btn-primary w-100 mb-2">Přihlásit se</button>
     <?php
     #region Facebook login
     
@@ -52,13 +53,13 @@ if (!empty($errors)) {
     $_SESSION['fb_state'] = $state;
 
     $fbLoginUrl = "https://www.facebook.com/v19.0/dialog/oauth?client_id=$appId&redirect_uri=$redirectUri&state=$state&scope=email";
-    echo '<a href="' . $fbLoginUrl . '" class="btn btn-primary">Přihlásit se přes Facebook</a>';
+    echo '<a href="' . $fbLoginUrl . '" class="btn btn-primary w-100 mb-4">Přihlásit se přes Facebook</a>';
 
 
     #endregion Facebook login
     ?>
-
     <a href="./signup.php">Vytvořit účet!</a>
+
 </form>
 
 <?php

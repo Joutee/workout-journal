@@ -36,16 +36,16 @@ if (!empty($errors)) {
 }
 ?>
 
-<div class="container">
-    <form method="post">
+<div class="">
+    <form method="post" class="mb-4">
         <div class="form-group">
             <label for="name">Název nové svalové skupiny</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control w-25" id="name" name="name" required>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Přidat</button>
+        <button type="submit" class="btn btn-primary">Přidat</button>
     </form>
-
-    <h2 class="mt-5">Seznam svalových skupin</h2>
+    <hr class="mb-4 divider">
+    <h2 class="">Seznam svalových skupin</h2>
     <ul class="list-group">
         <?php foreach ($muscleGroups as $muscles): ?>
             <li class="list-group-item d-flex justify-content-between align-items-center">

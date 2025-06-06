@@ -1,9 +1,7 @@
 <?php
-require_once __DIR__.'/inc/user.php';
+require_once __DIR__ . '/inc/user.php';
 $pageTitle = 'Tréninky';
-include __DIR__.'/inc/layoutApp.php';
-
-echo '<a href="newWorkout.php" class="btn btn-success mb-3">Přidat nový trénink</a>';
+include __DIR__ . '/inc/layoutApp.php';
 
 $exQuery = $db->prepare('SELECT exercise_id, name FROM exercise WHERE user_id = ? ORDER BY name');
 $exQuery->execute([$_SESSION['user_id']]);
@@ -12,24 +10,32 @@ $allExercises = $exQuery->fetchAll(PDO::FETCH_ASSOC);
 $selectedEx = isset($_GET['exercise']) && is_array($_GET['exercise']) ? array_map('intval', $_GET['exercise']) : [];
 
 ?>
-<form method="get" style="margin-bottom:20px;">
-    <fieldset style="border:1px solid #eee; border-radius:8px; padding:16px; display:inline-block;">
-        <legend style="font-weight:bold;">Filtrovat podle cviku:</legend>
-        <div style="display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+
+<a href="newWorkout.php" class="btn btn-primary mt-4"> <i class="bi bi-plus me-1"></i> Přidat</a>
+<hr class="divider">
+<div class="mb-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <form method="get" class="d-flex  flex-wrap flex-column">
+        <div class="d-flex flex-wrap gap-2">
             <?php foreach ($allExercises as $ex): ?>
-                <label style="margin-right:12px;">
-                    <input type="checkbox" name="exercise[]" value="<?= $ex['exercise_id'] ?>"
-                        <?= in_array($ex['exercise_id'], $selectedEx) ? 'checked' : '' ?>>
-                    <?= htmlspecialchars($ex['name']) ?>
-                </label>
+                <div class="col-auto ml-1">
+                    <label class="form-check-label" style="min-width: 160px;">
+                        <input class="form-check-input me-1" type="checkbox" name="exercise[]"
+                            value="<?= $ex['exercise_id'] ?>" <?= in_array($ex['exercise_id'], $selectedEx) ? 'checked' : '' ?>>
+                        <?= htmlspecialchars($ex['name']) ?>
+                    </label>
+                </div>
             <?php endforeach; ?>
         </div>
-        <div style="margin-top:12px;">
-            <button type="submit" class="btn btn-primary btn-sm">Filtrovat</button>
-            <a href="workouts.php" class="btn btn-secondary btn-sm" style="margin-left:8px;">Zrušit filtr</a>
+        <div class="mt-2">
+            <button type="submit" class="btn btn-primary btn-sm mr-2">Filtrovat</button>
+            <a href="workouts.php" class="btn btn-secondary btn-sm ms-2">Zrušit filtr</a>
         </div>
-    </fieldset>
-</form>
+    </form>
+
+</div>
+
 <?php
 
 $sql = '
@@ -77,25 +83,50 @@ foreach ($rows as $row) {
         ];
     }
 }
+?>
 
-foreach ($workouts as $workout) {
-    echo '<a href="editWorkout.php?id=' . urlencode($workout['workout_id']) . '" style="text-decoration:none; color:inherit;">';
-    echo '<div><h2>' . htmlspecialchars($workout['name']) . '</h2>';
-    echo '<p>' . htmlspecialchars($workout['date']) . '</p>';
-    echo '<p>' . htmlspecialchars($workout['note']) . '</p>';
-    if (!empty($workout['sets'])) {
-        echo '<ul>';
-        foreach ($workout['sets'] as $set) {
-            echo '<li>' . htmlspecialchars($set['exercise_name']) . ': ';
-            echo htmlspecialchars($set['repetitions']) . 'x, ';
-            echo htmlspecialchars($set['weight']) . ' kg</li>';
-        }
-        echo '</ul>';
-    }
-    echo '<a href="duplicateWorkout.php?id=' . urlencode($workout['workout_id']) . '" class="btn btn-warning btn-sm" style="margin-top:8px; display:inline-block;">Duplikovat trénink</a>';
 
-    echo '</div>';
-    echo '</a>';
-}
+<div class=" py-4">
+    <?php foreach ($workouts as $workout): ?>
+        <div
+            class="card bg-dark-custom text-light shadow h-100 mb-4  d-flex flex-column flex-md-row justify-content-between align-items-start">
 
+
+            <div class="flex-grow-1">
+                <div class="d-flex flex-row justify-content-between align-items-start">
+                    <h3 class="card-title text-warning mb-0"><?= htmlspecialchars($workout['name']) ?>
+                    </h3>
+                    <div class="d-flex flex-row align-items-start ms-3">
+                        <a href="editWorkout.php?id=<?= urlencode($workout['workout_id']) ?>" title="Upravit"
+                            style="color:inherit; font-size:1.4rem; display:inline-block; margin-right: 0.7rem;">
+                            <i class="bi bi-pencil" style="font-size:1.2rem"></i>
+                        </a>
+                        <a href=" duplicateWorkout.php?id=<?= urlencode($workout['workout_id']) ?>" title="Duplikovat"
+                            style="color:inherit; font-size:1.4rem; display:inline-block;">
+                            <i class="bi bi-files" style="font-size:1.2rem"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class=" mb-2 text-secondary small"><?= htmlspecialchars($workout['date']) ?>
+                </div>
+                <div class="mb-2"><?= nl2br(htmlspecialchars($workout['note'])) ?></div>
+                <?php if (!empty($workout['sets'])): ?>
+                    <ul class="mb-2 list-unstyled">
+                        <?php foreach ($workout['sets'] as $set): ?>
+                            <li>
+                                <?= htmlspecialchars($set['exercise_name']) ?>:
+                                <?= htmlspecialchars($set['repetitions']) ?>x,
+                                <?= htmlspecialchars($set['weight']) ?> kg
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            </div>
+
+        </div>
+    <?php endforeach; ?>
+</div>
+
+<?php
 include 'inc/footer.php';
+?>

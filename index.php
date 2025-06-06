@@ -104,6 +104,7 @@ $query = $db->prepare('
       )
     GROUP BY es.exercise_id
     ORDER BY e.name
+    LIMIT 10
 ');
 $query->execute([':user_id' => $_SESSION['user_id']]);
 $lastSets = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -131,39 +132,11 @@ foreach ($workoutWeights as $row) {
 
 <div class="container-fluid py-4">
     <div class="row g-4">
-        <!-- Levý sloupec: Statistiky a grafy -->
-        <div class="col-lg-5 col-12">
+        <div class="col-lg-4 col-md-6 col-12">
             <div class="card text-center mb-4 shadow">
                 <h2 class="mb-3">Celková zvednutá váha</h2>
-                <div class="display-4 fw-bold text-warning">
+                <div class="display-4 fw-bold ">
                     <?php echo number_format($totalWeight ?? 0, 1, ',', ' '); ?> kg
-                </div>
-            </div>
-            <div class="card mb-4 shadow">
-                <h3 class="mb-3">Rozložení svalových skupin (%)</h3>
-                <div class="mx-auto" style="max-width: 350px;">
-                    <canvas id="muscleChart"></canvas>
-                </div>
-            </div>
-            <div class="card mb-4 shadow">
-                <h3 class="mb-3">Poměr sérií bez zátěže / se zátěží</h3>
-                <div class="mx-auto" style="max-width: 350px;">
-                    <canvas id="weightChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <!-- Pravý sloupec: Vývoj a tabulky -->
-        <div class="col-lg-7 col-12">
-            <div class="card mb-4 shadow">
-                <h3 class="mb-3">Vývoj celkové váhy podle tréninku</h3>
-                <div style="height: 300px;">
-                    <canvas id="workoutWeightChart"></canvas>
-                </div>
-            </div>
-            <div class="card mb-4 shadow">
-                <h3 class="mb-3">Maximální váha v sérii podle cviku</h3>
-                <div style="height: 300px;">
-                    <canvas id="maxWeightChart"></canvas>
                 </div>
             </div>
             <div class="card mb-4 shadow">
@@ -191,6 +164,39 @@ foreach ($workoutWeights as $row) {
                     </table>
                 </div>
             </div>
+
+        </div>
+        <div class="col-lg-4 col-md-6 col-12">
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Vývoj celkové váhy podle tréninku</h3>
+                <div style="height: 300px;">
+                    <canvas class="chart" id="workoutWeightChart"></canvas>
+                </div>
+            </div>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Maximální váha v sérii podle cviku</h3>
+                <div style="height: 300px;">
+                    <canvas class="chart" id="maxWeightChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-12">
+
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Rozložení svalových skupin (%)</h3>
+                <div class="mx-auto" style="max-width: 350px;">
+                    <canvas class="chart" id="muscleChart" style="width:100%;height:100%;"></canvas>
+                </div>
+            </div>
+            <div class="card mb-4 shadow">
+                <h3 class="mb-3">Poměr sérií bez zátěže / se zátěží</h3>
+                <div class="mx-auto" style="max-width: 350px;">
+                    <canvas class="chart" id="weightChart"></canvas>
+                </div>
+            </div>
+
+
+
         </div>
     </div>
 
