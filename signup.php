@@ -64,14 +64,16 @@ $pageTitle = 'Registrace';
 include 'inc/layoutAuth.php';
 ?>
 <?php
-if (!empty($errors)) {
-    foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
-    }
-}
 ?>
 <form method="post" class="w-25 card d-flex flex-column align-items-center">
     <h1 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+    <?php
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            echo '<div class="alert alert-danger w-100">' . htmlspecialchars($error) . '</div>';
+        }
+    }
+    ?>
     <div class="form-group w-100">
         <label for="name">Jméno</label>
         <input type="text" class="form-control" id="name" name="name" required

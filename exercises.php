@@ -14,8 +14,7 @@ $muscleGroupsAll = $mgQuery->fetchAll(PDO::FETCH_ASSOC);
 $selectedMg = isset($_GET['muscle_group']) && is_array($_GET['muscle_group']) ? array_map('intval', $_GET['muscle_group']) : [];
 ?>
 
-<a href="newExercise.php" class="btn btn-primary mt-4
-">
+<a href="newExercise.php" class="btn btn-primary">
     <i class="bi bi-plus me-1"></i> Přidat
 </a>
 
@@ -60,7 +59,7 @@ if (!empty($selectedMg)) {
     $params = array_merge($params, $selectedMg);
 }
 
-$sql .= ' ORDER BY e.name DESC, mg.name';
+$sql .= ' ORDER BY e.name ASC, mg.name';
 
 $query = $db->prepare($sql);
 $query->execute($params);

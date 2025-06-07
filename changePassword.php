@@ -12,17 +12,26 @@ if (!empty($_POST)) {
 
     if (empty($current_password) || empty($new_password) || empty($new_password_confirm)) {
         $errors['password'] = 'Všechna pole jsou povinná.';
-    } elseif (strlen($new_password) < 8) {
+    }
+    if ($current_password == $new_password) {
+        $errors['password'] = 'Nové heslo nesmí být stejné jako současné heslo.';
+    }
+    if (strlen($new_password) < 8) {
         $errors['password'] = 'Nové heslo musí mít alespoň 8 znaků.';
-    } elseif (!preg_match('/[A-Z]/', $new_password)) {
+    }
+    if (!preg_match('/[A-Z]/', $new_password)) {
         $errors['password'] = 'Nové heslo musí obsahovat alespoň jedno velké písmeno.';
-    } elseif (!preg_match('/[0-9]/', $new_password)) {
+    }
+    if (!preg_match('/[0-9]/', $new_password)) {
         $errors['password'] = 'Nové heslo musí obsahovat alespoň jedno číslo.';
-    } elseif (!preg_match('/[\W_]/', $new_password)) {
+    }
+    if (!preg_match('/[\W_]/', $new_password)) {
         $errors['password'] = 'Nové heslo musí obsahovat alespoň jeden speciální znak.';
-    } elseif ($new_password !== $new_password_confirm) {
+    }
+    if ($new_password !== $new_password_confirm) {
         $errors['password'] = 'Nová hesla se neshodují.';
-    } else {
+    }
+    if (empty($errors)) {
         $query = $db->prepare('SELECT * FROM user WHERE user_id=:user_id;');
         $query->execute([':user_id' => $_SESSION['user_id']]);
         $user = $query->fetch(PDO::FETCH_ASSOC);
@@ -37,6 +46,11 @@ if (!empty($_POST)) {
             echo '<div class="alert alert-success">Heslo bylo úspěšně změněno.</div>';
         } else {
             echo '<div class="alert alert-danger">Současné heslo je nesprávné.</div>';
+        }
+    }
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            echo '<div class="alert alert-danger">' . htmlspecialchars($error) . '</div>';
         }
     }
 }

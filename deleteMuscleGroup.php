@@ -1,5 +1,10 @@
 <?php
 require_once __DIR__ . '/inc/user.php';
+require_once __DIR__ . '/inc/admin.php';
+if (!isUserAdmin($db, $_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
 include __DIR__ . '/inc/layoutApp.php';
 
 if (empty($_REQUEST['id'])) {

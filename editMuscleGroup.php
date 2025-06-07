@@ -1,7 +1,11 @@
 <?php
 require_once __DIR__ . '/inc/user.php';
 require_once __DIR__ . '/inc/admin.php';
-$pageTitle = 'Úprava Svalových skupin';
+if (!isUserAdmin($db, $_SESSION['user_id'])) {
+    header('Location: index.php');
+    exit;
+}
+$pageTitle = 'Úprava svalových skupin';
 include __DIR__ . '/inc/layoutApp.php';
 
 
@@ -14,15 +18,20 @@ $errors = [];
 if (!empty($_POST['name'])) {
     $name = trim($_POST['name']);
 
-    if (!empty($name)) {
+    if (empty($name)) {
+        $errors['name'] = 'Název svalové skupiny nesmí být prázdný.';
+    }
+    if (strlen($name) > 50) {
+        $errors['name'] = 'Název svalové skupiny musí být kratší než 50 znaků.';
+    }
+
+    if (empty($errors)) {
         $query = $db->prepare('INSERT INTO muscle_group (name) VALUES (:name)');
         $query->execute([
             ':name' => $name
         ]);
         header('Location: editMuscleGroup.php');
         exit;
-    } else {
-        $error = 'Název svalové skupiny nesmí být prázdný.';
     }
 }
 
@@ -31,18 +40,18 @@ if (!empty($_POST['name'])) {
 
 if (!empty($errors)) {
     foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
+        echo '<div class="alert alert-danger w-50">' . htmlspecialchars($error) . '</div>';
     }
 }
 ?>
 
-<div class="">
+<div>
     <form method="post" class="mb-4">
         <div class="form-group">
             <label for="name">Název nové svalové skupiny</label>
-            <input type="text" class="form-control w-25" id="name" name="name" required>
+            <input type="text" class="form-control w-50" id="name" name="name" required>
         </div>
-        <button type="submit" class="btn btn-primary">Přidat</button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-plus me-1"></i> Přidat</button>
     </form>
     <hr class="mb-4 divider">
     <h2 class="">Seznam svalových skupin</h2>

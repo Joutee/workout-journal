@@ -70,13 +70,17 @@ if (!empty($_POST)) {
     $exerciseSets = $_POST['exercise_sets'] ?? [];
     if (empty($name)) {
         $errors['name'] = 'Název tréninku je povinný.';
-    } elseif (strlen($name) > 100) {
+    }
+    if (strlen($name) > 100) {
         $errors['name'] = 'Název tréninku musí být kratší než 100 znaků.';
-    } elseif (empty($date)) {
+    }
+    if (empty($date)) {
         $errors['date'] = 'Datum je povinné.';
-    } elseif (empty($time)) {
+    }
+    if (empty($time)) {
         $errors['time'] = 'Čas je povinný.';
-    } elseif (empty($exerciseSets)) {
+    }
+    if (empty($exerciseSets)) {
         $errors['exercise_sets'] = 'Musíte přidat alespoň jednu cvičební sérii.';
     }
 
@@ -124,86 +128,88 @@ if (!empty($_POST)) {
 #endregion new workout
 if (!empty($errors)) {
     foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
+        echo '<div class="alert alert-danger w-50">' . htmlspecialchars($error) . '</div>';
     }
 }
 ?>
+<div class="card">
+    <form method="post" style="max-width: 50%;">
+        <div class="mb-3">
+            <label for="name" class="form-label">Název tréninku</label>
+            <input type="text" name="name" id="name" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['name'] ?? $days[date('N')] . ' trénink'); ?>" required>
+        </div>
 
-<form method="post" style="max-width: 700px;">
-    <div class="mb-3">
-        <label for="name" class="form-label">Název tréninku</label>
-        <input type="text" name="name" id="name" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['name'] ?? $days[date('N')] . ' trénink'); ?>" required>
-    </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Datum</label>
+            <input type="date" name="date" id="date" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['date'] ?? date('Y-m-d')); ?>"
+                max="<?php echo date('Y-m-d'); ?>" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="date" class="form-label">Datum</label>
-        <input type="date" name="date" id="date" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['date'] ?? date('Y-m-d')); ?>" max="<?php echo date('Y-m-d'); ?>"
-            required>
-    </div>
+        <div class="mb-3">
+            <label for="time" class="form-label">Čas</label>
+            <input type="time" name="time" id="time" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['time'] ?? date('H:i')); ?>" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="time" class="form-label">Čas</label>
-        <input type="time" name="time" id="time" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['time'] ?? date('H:i')); ?>" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="note" class="form-label">Poznámka</label>
-        <textarea name="note" class="form-control" id="note"><?php echo htmlspecialchars($note); ?></textarea>
-    </div>
+        <div class="mb-3">
+            <label for="note" class="form-label">Poznámka</label>
+            <textarea name="note" class="form-control" id="note"><?php echo htmlspecialchars($note); ?></textarea>
+        </div>
 
 
-    <h4>Cvičební série</h4>
-    <div id="exerciseSets">
-        <?php
-        if (!empty($exerciseSets)) {
-            foreach ($exerciseSets as $i => $set) { ?>
-                <div class="exercise-set card d-flex flex-row justify-content-between mb-2">
-                    <div class="d-flex flex-row">
-                        <div class="mr-1 d-flex flex-column">
-                            <label>Cvik:</label>
-                            <select name="exercise_sets[<?php echo $i; ?>][exercise_id]" required>
-                                <?php foreach ($exercises as $exercise): ?>
-                                    <option value="<?php echo $exercise['exercise_id']; ?>" <?php if ($set['exercise_id'] == $exercise['exercise_id'])
-                                           echo 'selected'; ?>>
-                                        <?php echo htmlspecialchars($exercise['name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+        <h4>Cvičební série</h4>
+        <div id="exerciseSets">
+            <?php
+            if (!empty($exerciseSets)) {
+                foreach ($exerciseSets as $i => $set) { ?>
+                    <div class="exercise-set card d-flex flex-row justify-content-between mb-2">
+                        <div class="d-flex flex-row">
+                            <div class="mr-1 d-flex flex-column">
+                                <label>Cvik:</label>
+                                <select name="exercise_sets[<?php echo $i; ?>][exercise_id]" required>
+                                    <?php foreach ($exercises as $exercise): ?>
+                                        <option value="<?php echo $exercise['exercise_id']; ?>" <?php if ($set['exercise_id'] == $exercise['exercise_id'])
+                                               echo 'selected'; ?>>
+                                            <?php echo htmlspecialchars($exercise['name']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="mr-1 d-flex flex-column">
+                                <label>Počet opakování:</label>
+                                <input type="number" name="exercise_sets[<?php echo $i; ?>][repetitions]" min="1" required
+                                    value="<?php echo htmlspecialchars($set['repetitions']); ?>">
+                            </div>
+                            <div class="mr-1 d-flex flex-column">
+                                <label>Váha (kg):</label>
+                                <input type="number" name="exercise_sets[<?php echo $i; ?>][weight]" min="0" step="0.1" required
+                                    value="<?php echo htmlspecialchars($set['weight']); ?>">
+                            </div>
                         </div>
-                        <div class="mr-1 d-flex flex-column">
-                            <label>Počet opakování:</label>
-                            <input type="number" name="exercise_sets[<?php echo $i; ?>][repetitions]" min="1" required
-                                value="<?php echo htmlspecialchars($set['repetitions']); ?>">
-                        </div>
-                        <div class="mr-1 d-flex flex-column">
-                            <label>Váha (kg):</label>
-                            <input type="number" name="exercise_sets[<?php echo $i; ?>][weight]" min="0" step="0.1" required
-                                value="<?php echo htmlspecialchars($set['weight']); ?>">
+                        <div class="d-flex flex-column justify-content-end">
+                            <button type="button" onclick="removeExerciseSet(this)"
+                                class="btn btn-danger btn-sm h-50">&times;</button>
                         </div>
                     </div>
-                    <div class="d-flex flex-column justify-content-end">
-                        <button type="button" onclick="removeExerciseSet(this)"
-                            class="btn btn-danger btn-sm h-50">&times;</button>
-                    </div>
-                </div>
-            <?php }
-        }
-        ?>
-    </div>
-    <button type="button" onclick="addExerciseSet()" class="btn btn-outline-primary btn-sm mt-2 mb-3"><i
-            class="bi bi-plus"></i> Přidat sérii</button>
+                <?php }
+            }
+            ?>
+        </div>
+        <button type="button" onclick="addExerciseSet()" class="btn btn-outline-primary btn-sm mt-2 mb-3"><i
+                class="bi bi-plus"></i> Přidat sérii</button>
 
-    <div class="d-flex mt-4">
-        <input type="submit" value="Upravit" class="btn btn-primary mr-2">
-        <a href="workouts.php" class="btn btn-secondary mr-2">Zrušit</a>
-        <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"
-            onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat</a>
-    </div>
+        <div class="d-flex mt-4">
+            <button type="submit" class="btn btn-primary mr-2">Přidat</button> <a href="workouts.php"
+                class="btn btn-secondary mr-2">Zrušit</a>
+            <a href="deleteWorkout.php?id=<?php echo urlencode($workout_id); ?>" class="btn btn-danger"
+                onclick="return confirm('Opravdu chcete tento trénink smazat?');">Smazat</a>
+        </div>
 
-</form>
+    </form>
+</div>
+
 <script>
     const exercises = <?php echo json_encode(
         array_map(function ($e) {

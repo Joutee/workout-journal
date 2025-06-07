@@ -47,7 +47,7 @@ if (isset($_GET['code'])) {
                     $update = $db->prepare('UPDATE user SET facebook_id = :facebook_id WHERE user_id = :user_id');
                     $update->execute([
                         ':facebook_id' => $userDataFB['id'],
-                        ':user_id' => $user['user_id']    
+                        ':user_id' => $user['user_id']
                     ]);
                 }
                 $_SESSION['user_id'] = $user['user_id'];
@@ -66,6 +66,8 @@ if (isset($_GET['code'])) {
                 ]);
                 $_SESSION['user_id'] = $db->lastInsertId();
                 $_SESSION['user_full_name'] = [$name, $surname];
+                require_once __DIR__ . '/createDefaultExcercise.php';
+
             }
 
             // Přesměrování do aplikace

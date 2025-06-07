@@ -20,7 +20,7 @@ body {
 
 .card h2,
 .card h3,
-.card h4 {
+jak .card h4 {
   color: #f8d90f;
 }
 .table-dark {
@@ -41,40 +41,6 @@ a,
 a:hover,
 .nav-link:hover {
   color: #ffe066;
-}
-.btn-primary,
-.btn-primary:focus {
-  background: #dabd00;
-  color: #181a1b;
-  border: none;
-}
-
-.btn-primary:active {
-  background: #ffe066;
-  color: #181a1b;
-  border: none;
-}
-.btn-secondary {
-  background: #3b4046;
-  color: #f1f1f1;
-  border: none;
-}
-
-.btn-primary:hover {
-  background: #ffe066;
-  color: #181a1b;
-}
-
-.btn-outline-primary {
-  color: #f8d90f;
-  border-color: #f8d90f;
-}
-
-.btn-outline-primary:hover,
-.btn-outline-primary:focus {
-  background-color: #f8d90f;
-  color: #181a1b;
-  border-color: #dabd00;
 }
 
 .bg-dark-custom {
@@ -138,4 +104,75 @@ nav .nav-link.active {
   border-top: 1px solid #7e7e7e;
   margin-top: 1em;
   margin-bottom: 1em;
+}
+
+.exercise-set {
+  min-width: 650px;
+}
+input,
+textarea,
+select {
+  background: #373b3e !important;
+  color: #f1f1f1 !important;
+  border: 1px solid #1d2023 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  background: #0e0f10 !important;
+  color: #ffffff !important;
+  border-color: #f8d90f !important;
+  outline: none;
+}
+
+.btn-primary,
+.btn-primary:focus {
+  background: #dabd00;
+  color: #181a1b;
+  border: none;
+}
+
+.btn-primary:active {
+  background: #ffe066;
+  color: #181a1b;
+  border: none;
+}
+.btn-secondary {
+  background: #3b4046;
+  color: #f1f1f1;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: #ffe066;
+  color: #181a1b;
+}
+
+.btn-outline-primary {
+  color: #f8d90f;
+  border-color: #f8d90f;
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: #f8d90f;
+  color: #181a1b;
+  border-color: #dabd00;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) invert(1);
+}
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: brightness(0) invert(1);
+}
+.btn-primary:active,
+.btn-primary:focus:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+  background: #ffe066 !important;
+  color: #181a1b !important;
+  border: none !important;
+  box-shadow: none !important;
 }

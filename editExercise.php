@@ -97,41 +97,43 @@ if (!empty($_POST)) {
 
 if (!empty($errors)) {
     foreach ($errors as $error) {
-        echo '<div class="alert alert-danger">' . htmlspecialchars($error) . '</div>';
+        echo '<div class="alert alert-danger w-50">' . htmlspecialchars($error) . '</div>';
     }
 }
 ?>
-<form method="post" action="">
-    <div class="form-group">
-        <label for="name">Název cviku</label>
-        <input type="text" class="form-control" id="name" name="name" required
-            value="<?php echo htmlspecialchars($name); ?>">
-    </div>
-    <div class="form-group mb-3">
-        <label for="description">Popis (volitelné)</label>
-        <textarea class="form-control" id="description"
-            name="description"><?php echo htmlspecialchars($description); ?></textarea>
-    </div>
-    <div class="form-group">
-        <label>Svalové skupiny</label><br>
-        <?php foreach ($muscleGroups as $group): ?>
-            <div class="form-check form-check-inline">
-                <input class="form-check-input" type="checkbox" id="mg_<?php echo $group['muscle_group_id']; ?>"
-                    name="muscle_group_ids[]" value="<?php echo $group['muscle_group_id']; ?>" <?php if (!empty($selectedMuscles) && in_array($group['muscle_group_id'], $selectedMuscles))
-                           echo 'checked'; ?>>
-                <label class="form-check-label" for="mg_<?php echo $group['muscle_group_id']; ?>">
-                    <?php echo htmlspecialchars($group['name']); ?>
-                </label>
-            </div>
-        <?php endforeach; ?>
-    </div>
-    <div class="">
-        <button type="submit" class="btn btn-primary mr-2 ">Upravit</button>
-        <a href="exercises.php" class="btn btn-secondary mr-2">Zrušit</a>
-        <a href="deleteExercise.php?id=<?php echo urlencode($exercise_id); ?>" class="btn btn-danger ms-auto"
-            onclick="return confirm('Opravdu chcete tento cvik smazat?');">Smazat</a>
-    </div>
-</form>
+<div class="card">
+    <form method="post" action="">
+        <div class="form-group">
+            <label for="name">Název cviku</label>
+            <input type="text" class="form-control w-50" id="name" name="name" required
+                value="<?php echo htmlspecialchars($name); ?>">
+        </div>
+        <div class="form-group mb-3">
+            <label for="description">Popis (volitelné)</label>
+            <textarea class="form-control w-50" id="description"
+                name="description"><?php echo htmlspecialchars($description); ?></textarea>
+        </div>
+        <div class="form-group">
+            <label>Svalové skupiny</label><br>
+            <?php foreach ($muscleGroups as $group): ?>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="mg_<?php echo $group['muscle_group_id']; ?>"
+                        name="muscle_group_ids[]" value="<?php echo $group['muscle_group_id']; ?>" <?php if (!empty($selectedMuscles) && in_array($group['muscle_group_id'], $selectedMuscles))
+                               echo 'checked'; ?>>
+                    <label class="form-check-label" for="mg_<?php echo $group['muscle_group_id']; ?>">
+                        <?php echo htmlspecialchars($group['name']); ?>
+                    </label>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="">
+            <button type="submit" class="btn btn-primary mr-2 ">Upravit</button>
+            <a href="exercises.php" class="btn btn-secondary mr-2">Zrušit</a>
+            <a href="deleteExercise.php?id=<?php echo urlencode($exercise_id); ?>" class="btn btn-danger ms-auto"
+                onclick="return confirm('Opravdu chcete tento cvik smazat?');">Smazat</a>
+        </div>
+    </form>
+</div>
 
 
 

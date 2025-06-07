@@ -203,6 +203,7 @@ foreach ($workoutWeights as $row) {
     <!-- Poslední tréninky -->
     <div class="card mt-4 shadow">
         <h3 class="mb-3">Poslední tréninky</h3>
+        <hr class="divider">
         <?php if (!empty($workouts)): ?>
             <div class="row g-3">
                 <?php foreach ($workouts as $workout): ?>

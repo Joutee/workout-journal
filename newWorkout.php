@@ -100,48 +100,49 @@ if (!empty($_POST)) {
 #endregion new workout
 if (!empty($errors)) {
     foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
+        echo '<div class="alert alert-danger w-50">' . htmlspecialchars($error) . '</div>';
     }
 }
 ?>
+<div class="card">
+    <form method="post" style="max-width: 50%;">
+        <div class="mb-3">
+            <label for="name" class="form-label">Název tréninku</label>
+            <input type="text" name="name" id="name" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['name'] ?? $days[date('N')] . ' trénink'); ?>" required>
+        </div>
 
-<form method="post" style="max-width: 700px;">
-    <div class="mb-3">
-        <label for="name" class="form-label">Název tréninku</label>
-        <input type="text" name="name" id="name" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['name'] ?? $days[date('N')] . ' trénink'); ?>" required>
-    </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Datum</label>
+            <input type="date" name="date" id="date" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['date'] ?? date('Y-m-d')); ?>"
+                max="<?php echo date('Y-m-d'); ?>" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="date" class="form-label">Datum</label>
-        <input type="date" name="date" id="date" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['date'] ?? date('Y-m-d')); ?>" max="<?php echo date('Y-m-d'); ?>"
-            required>
-    </div>
+        <div class="mb-3">
+            <label for="time" class="form-label">Čas</label>
+            <input type="time" name="time" id="time" class="form-control"
+                value="<?php echo htmlspecialchars($_POST['time'] ?? date('H:i')); ?>" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="time" class="form-label">Čas</label>
-        <input type="time" name="time" id="time" class="form-control"
-            value="<?php echo htmlspecialchars($_POST['time'] ?? date('H:i')); ?>" required>
-    </div>
+        <div class="mb-3">
+            <label for="note" class="form-label">Poznámka</label>
+            <textarea name="note" id="note"
+                class="form-control"><?php echo htmlspecialchars($_POST['note'] ?? ''); ?></textarea>
+        </div>
 
-    <div class="mb-3">
-        <label for="note" class="form-label">Poznámka</label>
-        <textarea name="note" id="note"
-            class="form-control"><?php echo htmlspecialchars($_POST['note'] ?? ''); ?></textarea>
-    </div>
+        <h4 class="mt-4">Cvičební série</h4>
+        <div id="exerciseSets"></div>
+        <button type="button" onclick="addExerciseSet()" class="btn btn-outline-primary btn-sm mt-2 mb-3">
+            <i class="bi bi-plus"></i> Přidat sérii
+        </button>
 
-    <h4 class="mt-4">Cvičební série</h4>
-    <div id="exerciseSets"></div>
-    <button type="button" onclick="addExerciseSet()" class="btn btn-outline-primary btn-sm mt-2 mb-3">
-        <i class="bi bi-plus"></i> Přidat sérii
-    </button>
-
-    <div class="d-flex mt-4">
-        <input type="submit" value="Přidat" class="btn btn-primary mr-2">
-        <a href="workouts.php" class="btn btn-secondary">Zrušit</a>
-    </div>
-</form>
+        <div class="d-flex mt-4">
+            <button type="submit" class="btn btn-primary mr-2">Přidat</button> <a href="workouts.php"
+                class="btn btn-secondary">Zrušit</a>
+        </div>
+    </form>
+</div>
 <script>
     const exercises = <?php echo json_encode(
         array_map(function ($e) {

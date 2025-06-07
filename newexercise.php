@@ -66,11 +66,11 @@ if (!empty($_POST)) {
 }
 if (!empty($errors)) {
     foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
+        echo '<div class="alert alert-danger w-50">' . htmlspecialchars($error) . '</div>';
     }
 }
 ?>
-
+<div class="card">
 <form method="post" action="">
     <div class="form-group">
         <label for="name">Název cviku</label>
@@ -103,6 +103,7 @@ if (!empty($errors)) {
     <button type="submit" class="btn btn-primary mr-2">Přidat</button>
     <a href="exercises.php" class="btn btn-secondary">Zrušit</a>
 </form>
+</div>
 
 <?php
 include 'inc/footer.php';

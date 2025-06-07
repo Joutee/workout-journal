@@ -26,14 +26,16 @@ if (!empty($_POST['password']) && !empty($_POST['email'])) {
 $pageTitle = 'Přihlášení';
 include './inc/layoutAuth.php';
 
-if (!empty($errors)) {
-    foreach ($errors as $error) {
-        echo '<p style="color:red;">' . htmlspecialchars($error) . '</p>';
-    }
-}
 ?>
 <form method="post" class="w-25 card d-flex flex-column align-items-center">
     <h1 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+    <?php
+    if (!empty($errors)) {
+        foreach ($errors as $error) {
+            echo '<div class="alert alert-danger w-100">' . htmlspecialchars($error) . '</div>';
+        }
+    }
+    ?>
     <div class="form-group w-100">
         <label for="email">Email</label>
         <input type="email" class="form-control" id="email" name="email" required

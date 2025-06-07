@@ -13,7 +13,7 @@ $selectedEx = isset($_GET['exercise']) && is_array($_GET['exercise']) ? array_ma
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 
-<a href="newWorkout.php" class="btn btn-primary mt-4"> <i class="bi bi-plus me-1"></i> Přidat</a>
+<a href="newWorkout.php" class="btn btn-primary"> <i class="bi bi-plus me-1"></i> Přidat</a>
 <hr class="divider">
 <div class="mb-1 d-flex justify-content-between align-items-center flex-wrap gap-2">
     <form method="get" class="d-flex  flex-wrap flex-column">
@@ -110,13 +110,19 @@ foreach ($rows as $row) {
                 <div class=" mb-2 text-secondary small"><?= htmlspecialchars($workout['date']) ?>
                 </div>
                 <div class="mb-2"><?= nl2br(htmlspecialchars($workout['note'])) ?></div>
+                <hr class="divider">
                 <?php if (!empty($workout['sets'])): ?>
                     <ul class="mb-2 list-unstyled">
+                        <li class="row mb-1 fw-bold text-warning">
+                            <div class="col-5 font-weight-bold">Cvik</div>
+                            <div class="col-2 font-weight-bold">Opakování</div>
+                            <div class="col-2 font-weight-bold">Váha</div>
+                        </li>
                         <?php foreach ($workout['sets'] as $set): ?>
-                            <li>
-                                <?= htmlspecialchars($set['exercise_name']) ?>:
-                                <?= htmlspecialchars($set['repetitions']) ?>x,
-                                <?= htmlspecialchars($set['weight']) ?> kg
+                            <li class="row mb-1">
+                                <div class="col-5"><?= htmlspecialchars($set['exercise_name']) ?></div>
+                                <div class="col-2"><?= htmlspecialchars($set['repetitions']) ?></div>
+                                <div class="col-2"><?= htmlspecialchars($set['weight']) ?> kg</div>
                             </li>
                         <?php endforeach; ?>
                     </ul>
