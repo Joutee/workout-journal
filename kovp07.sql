@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 07, 2025 at 09:39 PM
+-- Generation Time: Jun 09, 2025 at 07:53 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -165,17 +165,19 @@ CREATE TABLE `user` (
   `surname` varchar(50) NOT NULL,
   `email` varchar(200) NOT NULL,
   `password` varchar(255) NOT NULL DEFAULT '',
-  `facebook_id` varchar(50) NOT NULL,
-  `admin` tinyint(1) NOT NULL DEFAULT 0
+  `facebook_id` varchar(50) DEFAULT NULL,
+  `admin` tinyint(1) NOT NULL DEFAULT 0,
+  `reset_token` varchar(64) DEFAULT NULL,
+  `reset_expiry` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `facebook_id`, `admin`) VALUES
-(9, 'Petr', 'Kovanda', 'kovp07@vse.cz', '$2y$10$ggEIwfA4A1FB1jS1qO.BFefQmXH8kzLIU.D/yXJhdu5pFL1yAuYqq', '', 1),
-(11, 'Jarmil', 'Vrtulnik', 'kotojoj993@rowplant.com', '$2y$10$1gmBHkeOA2WffIc5A/NI7eGeWqXxmNCQxX.rpzXWfjhB2BXtQcj/q', '', 0);
+INSERT INTO `user` (`user_id`, `name`, `surname`, `email`, `password`, `facebook_id`, `admin`, `reset_token`, `reset_expiry`) VALUES
+(9, 'Petr', 'Kovanda', 'kovp07@vse.cz', '$2y$10$ggEIwfA4A1FB1jS1qO.BFefQmXH8kzLIU.D/yXJhdu5pFL1yAuYqq', '', 1, NULL, NULL),
+(11, 'Jarmil', 'Vrtulnik', 'kotojoj993@rowplant.com', '$2y$10$1gmBHkeOA2WffIc5A/NI7eGeWqXxmNCQxX.rpzXWfjhB2BXtQcj/q', '', 0, NULL, NULL);
 
 -- --------------------------------------------------------
 

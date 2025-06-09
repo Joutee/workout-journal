@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once __DIR__ . '/inc/db.php'; // Ujisti se, že tento soubor připojuje PDO $db
+require_once __DIR__ . '/inc/db.php';
 
 $appId = '737208485413000';
 $appSecret = '5409ec2568ebd083fa9dc4bcae7fbaa4';

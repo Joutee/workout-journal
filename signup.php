@@ -10,9 +10,17 @@ if (!empty($_POST)) {
         $errors['name'] = 'Musíte zadat své jméno';
     }
 
+    if (strlen($_POST['name']) > 30) {
+        $errors['name'] = 'Jméno musí mít maximálně 30 znaků.';
+    }
+
     $surname = trim(@$_POST['surname']);
     if (empty($surname)) {
         $errors['surname'] = 'Musíte zadat své příjmení';
+    }
+
+    if (strlen($_POST['name']) > 50) {
+        $errors['surname'] = 'Příjmení musí mít maximálně 50 znaků.';
     }
 
     $email = trim(@$_POST['email']);
@@ -28,11 +36,22 @@ if (!empty($_POST)) {
         }
     }
 
-    if (empty($_POST['password']) || (strlen($_POST['password']) < 8)) {
-        $errors[] = 'Heslo musí být dlouhé aslespoň 8 znaků.';
-    } elseif ($_POST['password'] !== $_POST['password2']) {
-        $errors[] = 'Hesla se neshodují.';
+    if (strlen($_POST['password']) < 8) {
+        $errors['password'] = 'Heslo musí mít alespoň 8 znaků.';
     }
+    if (!preg_match('/[A-Z]/', $_POST['password'])) {
+        $errors['password'] = 'Heslo musí obsahovat alespoň jedno velké písmeno.';
+    }
+    if (!preg_match('/[0-9]/', $_POST['password'])) {
+        $errors['password'] = 'Heslo musí obsahovat alespoň jedno číslo.';
+    }
+    if (!preg_match('/[\W_]/', $_POST['password'])) {
+        $errors['password'] = 'Heslo musí obsahovat alespoň jeden speciální znak.';
+    }
+    if ($_POST['password'] !== $_POST['password2']) {
+        $errors['password'] = 'Hesla se neshodují.';
+    }
+
 
     if (empty($errors)) {
         $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
@@ -65,8 +84,8 @@ include 'inc/layoutAuth.php';
 ?>
 <?php
 ?>
-<form method="post" class="w-25 card d-flex flex-column align-items-center">
-    <h1 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h1>
+<form method="post" class="w-25 card d-flex flex-column align-items-center login-card">
+    <h2 class=""><?php echo (!empty($pageTitle) ? $pageTitle : '') ?></h2>
     <?php
     if (!empty($errors)) {
         foreach ($errors as $error) {
