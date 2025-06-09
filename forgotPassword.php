@@ -30,10 +30,12 @@ if (!empty($_POST['email'])) {
                 ':user_id' => $user['user_id']
             ]);
 
-            // Send reset link via email
             $resetLink = 'https://eso.vse.cz/~kovp07/semestralka/resetPassword.php?token=' . urlencode($resetToken);
-            //mail('kovp07@vse.cz', 'Smradoch', 'smrdis');
-            mail($email, 'Obnoveni hesla', 'Kliknete na tento odkaz pro obnoveni hesla: ' . $resetLink);
+
+            $headers = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+            $headers .= "From: noreply@fit-journal.cz\r\n";
+            mail($email, 'Obnoveni hesla', 'Kliknete na tento odkaz pro obnoveni hesla: ' . $resetLink, $headers);
             $success = 'Odkaz pro obnovení hesla byl odeslán na váš e-mail.';
         }
     }
