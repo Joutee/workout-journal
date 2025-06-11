@@ -34,6 +34,17 @@ if (!empty($_POST)) {
     if (empty($muscle_group_ids)) {
         $errors['muscle_group_ids'] = 'Vyberte alespoň jednu svalovou skupinu.';
     }
+    
+    $placeholders = implode(',', array_fill(0, count($muscle_group_ids), '?'));
+    $query = $db->prepare("SELECT COUNT(*) FROM muscle_group WHERE muscle_group_id IN (:muscle_group_ids)");
+    $query->execute([':muscle_group_ids' => $placeholders]);
+    $count = $query->fetchColumn(); 
+
+    if ($count != count($muscle_group_ids)) {
+        $errors['muscle_group_ids'] = 'Jedna nebo více vybraných svalových skupin neexistuje.';
+    }
+
+
     #endregion form validation
 
     #region database insertion

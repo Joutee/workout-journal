@@ -46,15 +46,22 @@ if (!empty($_POST)) {
         $errors['name'] = 'Název tréninku je povinný.';
     }
     if (!empty($date)) {
-        if ($date > $today) {
+        $dateCorrect = DateTime::createFromFormat('Y-m-d', $date);
+        if (!$dateCorrect || $dateCorrect->format('Y-m-d') !== $date) {
+            $errors['date'] = 'Datum musí být ve formátu YYYY-MM-DD.';
+        } elseif ($date > $today) {
             $errors['date'] = 'Datum nesmí být v budoucnosti.';
         }
     } else {
         $errors['date'] = 'Datum je povinné.';
     }
+
     if (!empty($time)) {
-        if ($date === $today && $inputDateTime > $now) {
-            $errors['time'] = 'Čas nesmí být v minulosti.';
+        $timeCorrect = DateTime::createFromFormat('H:i', $time);
+        if (!$timeCorrect || $timeCorrect->format('H:i') !== $time) {
+            $errors['time'] = 'Čas musí být ve formátu HH:mm.';
+        } elseif ($date === $today && $inputDateTime > $now) {
+            $errors['time'] = 'Čas nesmí být v budoucnosti.';
         }
     } else {
         $errors['time'] = 'Čas je povinný.';
@@ -62,6 +69,20 @@ if (!empty($_POST)) {
     if (empty($exerciseSets)) {
         $errors['exercise_sets'] = 'Musíte přidat alespoň jednu cvičební sérii.';
     }
+
+    foreach ($exerciseSets as $exerciseSet) {
+        if (isset($exerciseSet['exercise_id']) && isset($exerciseSet['repetitions']) && isset($exerciseSet['weight'])) {
+            if ($exerciseSet['weight'] < 0) {
+                $errors['exercise_sets'] = 'Hodnota váhy (weight) nesmí být záporná.';
+            }
+            if ($exerciseSet['repetitions'] <= 0) {
+                $errors['exercise_sets'] = 'Počet opakování musí být větší než 0.';
+            }
+        } else {
+            $errors['exercise_sets'] = 'Všechny cvičební série musí mít vyplněné všechny údaje.';
+        }
+    }
+
 
     $datetime = $date . ' ' . $time . ':00';
 

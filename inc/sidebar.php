@@ -43,6 +43,11 @@ require_once __DIR__ . '/admin.php';
     </a>
 
     <div class="mt-auto">
+        <?php if (isUserAdmin($db, $_SESSION['user_id'])): ?>
+            <div class="mb-3 text-light small text-center display-1 font-weight-bold">
+                Admin
+            </div>
+        <?php endif; ?>
         <?php if (!empty($_SESSION['user_full_name'])): ?>
             <div class="mb-3 text-light small text-center display-1">
                 <?= htmlspecialchars(implode(' ', $_SESSION['user_full_name'])) ?>
