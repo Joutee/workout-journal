@@ -1,0 +1,23 @@
+# Konfigurační soubory
+.env
+/config.php
+/db.php
+
+# Composer
+/vendor/
+composer.lock
+
+# IDE a editor
+.vscode/
+.idea/
+*.swp
+
+# Dočasné soubory a logy
+/tmp/
+*.log
+*.bak
+*.tmp
+
+# Systémové soubory
+.DS_Store
+Thumbs.db

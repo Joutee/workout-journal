@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/inc/anonymUser.php';
-
+require_once 'vendor/autoload.php';
 
 $errors = [];
 
@@ -24,8 +24,25 @@ if (!empty($_POST['password']) && !empty($_POST['email'])) {
         $errors[] = 'Neplatné přihlašovací údaje.';
     }
 }
+
 $pageTitle = 'Přihlášení';
 include './inc/layoutAuth.php';
+
+// Google OAuth konfigurace
+$client = new Google_Client();
+$client->setClientId('272107211808-87pu5hhcaah06otrmqv7upi8e2nqv839.apps.googleusercontent.com');
+$client->setClientSecret('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');
+$client->setRedirectUri('https://eso.vse.cz/~kovp07/semestralka/googleCallback.php');
+$client->addScope('email');
+$client->addScope('profile');
+
+// Přidání state parametru pro bezpečnost
+$state = bin2hex(random_bytes(16));
+$_SESSION['google_state'] = $state;
+$client->setState($state);
+
+// Vygeneruj URL pro přihlášení
+$loginUrl = $client->createAuthUrl();
 
 ?>
 <form method="post" class="w-25 card d-flex flex-column align-items-center login-card">
@@ -47,20 +64,8 @@ include './inc/layoutAuth.php';
         <input type="password" class="form-control" id="password" name="password" required>
     </div>
     <button type="submit" class="btn btn-primary w-100 mb-2">Přihlásit se</button>
-    <?php
-    #region Facebook login
-    
-    $appId = '737208485413000';
-    $redirectUri = urlencode('https://eso.vse.cz/~kovp07/semestralka/fbCallback.php');
-    $state = bin2hex(random_bytes(8));
-    $_SESSION['fb_state'] = $state;
 
-    $fbLoginUrl = "https://www.facebook.com/v19.0/dialog/oauth?client_id=$appId&redirect_uri=$redirectUri&state=$state&scope=email";
-    echo '<a href="' . $fbLoginUrl . '" class="btn btn-primary w-100 mb-4">Přihlásit se přes Facebook</a>';
-
-
-    #endregion Facebook login
-    ?>
+    <a href="<?= htmlspecialchars($loginUrl) ?>" class="btn btn-danger w-100 mb-2">Přihlásit se přes Google</a>
     <a href="./signup.php">Vytvořit účet!</a>
     <a href="./forgotPassword.php">Zapomenuté heslo</a>
 
